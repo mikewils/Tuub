@@ -141,6 +141,7 @@ t_int* pix_scanned :: perform(t_int* w)
 	phs += scanspeed;
 	//phs += 0.027;
 
+// TEST COMMENT TODO DELETE ME
 	
 #if 0
 	if ((n % 64) == 0) {
