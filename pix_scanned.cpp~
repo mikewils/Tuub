@@ -19,11 +19,6 @@ pix_scanned :: pix_scanned() : m_data(NULL), m_size(0)
   int i=4;
   while(i--)
     o_col[i]=outlet_new(this->x_obj, &s_signal);
-  floatinlet_new(this->x_obj, &this->m_scanspeed);
-  this->m_phs = 0.f;
-  this->m_x1 = 0.f;
-  this->m_y1 = 0.f;
-  this->m_scanspeed= 0.001;
 }
 
 /////////////////////////////////////////////////////////
@@ -53,6 +48,7 @@ void pix_scanned :: processImage(imageStruct &image)
   m_csize = image.csize;
   m_format = image.format;
   m_xsize = image.xsize;
+  m_phs = 0.f;
 }
 
 /////////////////////////////////////////////////////////
@@ -70,13 +66,10 @@ t_int* pix_scanned :: perform(t_int* w)
   int xcor = 0;
   int ycor = 0;
   int xsize = x->m_xsize;
-  t_float x1 = x->m_x1;
-  t_float y1 = x->m_y1;
-  t_float scanspeed = x->m_scanspeed;
 
   unsigned char* data = x->m_data;
   long int pix_size   = x->m_size;
-  int n = N;
+  int n = N
 
 #if 0
   ::post("chRed: %d", chRed);
@@ -107,33 +100,20 @@ t_int* pix_scanned :: perform(t_int* w)
     switch(x->m_format){
     case GL_RGBA: default:
       while(n--){
-	float x;
-	xcor = sinelu(phs, 20) + 25;
-	ycor = coslu(phs, 15) + 30;
+	xcor = sinelu(phs, 30) + 35;
+	ycor = coslu(phs, 40) + 42;
 
-	x = (((float) 
-	      (data[ (xcor + ycor * xsize) * csize + 0] + 
-	       data[ (xcor + ycor * xsize) * csize + 1] + 
-	       data[ (xcor + ycor * xsize) * csize + 2])) / (255.0 * 3));
-
-
-	y1 = x - x1 + 0.994 * y1;
-	x1 = x;
-
-	*(out_red++) = y1;
-
-	//	phs += scanspeed;
-	phs += 0.027;
-
-	
 #if 0
-	if ((n % 64) == 0) {
-	  //	  ::post("%f", ((float) (data[(xcor + ycor * xsize) * csize + 0])) / 255.0);
-	  ::post("%f", scanspeed);
-	}
+	*(out_red++) = (data[ (xcor + ycor * xsize) * csize + 0] + 
+			data[ (xcor + ycor * xsize) * csize + 1] + 
+			data[ (xcor + ycor * xsize) * csize + 2]);
 #endif
-	
 
+	*(out_red++) = (data[ (xcor + ycor * xsize) * csize + 0] + 
+			data[ (xcor + ycor * xsize) * csize + 1] + 
+			data[ (xcor + ycor * xsize) * csize + 2]);
+	
+	phs += 1.f;
 #if 0
 	*(out_red  ++) = data[chRed]  *scale0;
 	*(out_green++) = data[chGreen]*scale1;
@@ -175,9 +155,6 @@ t_int* pix_scanned :: perform(t_int* w)
     n=N;
     while (n--) *out_red++=*out_green++=*out_blue++=*out_alpha++=0;
   }
-
-  x->m_x1 = x1;
-  x->m_y1 = y1;
 
   x->m_phs = phs;
   return (w+7);
