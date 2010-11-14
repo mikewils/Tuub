@@ -20,9 +20,13 @@ pix_scanned :: pix_scanned() : m_data(NULL), m_size(0)
   while(i--)
     o_col[i]=outlet_new(this->x_obj, &s_signal);
   floatinlet_new(this->x_obj, &this->m_scanspeed);
+  floatinlet_new(this->x_obj, &this->m_xradius);
+  floatinlet_new(this->x_obj, &this->m_yradius);
   this->m_phs = 0.f;
   this->m_x1 = 0.f;
   this->m_y1 = 0.f;
+  this->m_xradius = 10.f;
+  this->m_yradius = 10.f;
   this->m_scanspeed= 0.001;
 }
 
@@ -53,6 +57,7 @@ void pix_scanned :: processImage(imageStruct &image)
   m_csize = image.csize;
   m_format = image.format;
   m_xsize = image.xsize;
+  m_ysize = image.ysize;
 }
 
 /////////////////////////////////////////////////////////
@@ -70,13 +75,19 @@ t_int* pix_scanned :: perform(t_int* w)
   int xcor = 0;
   int ycor = 0;
   int xsize = x->m_xsize;
+  int ysize = x->m_ysize;
   t_float x1 = x->m_x1;
   t_float y1 = x->m_y1;
   t_float scanspeed = x->m_scanspeed;
+  t_float xradius = x->m_xradius;
+  t_float yradius = x->m_yradius;
 
   unsigned char* data = x->m_data;
   long int pix_size   = x->m_size;
   int n = N;
+
+  //  ::post("xradius: %f", xradius);
+  //::post("yradius: %f", yradius);
 
 #if 0
   ::post("chRed: %d", chRed);
@@ -108,13 +119,18 @@ t_int* pix_scanned :: perform(t_int* w)
     case GL_RGBA: default:
       while(n--){
 	float x;
-	xcor = sinelu(phs, 20) + 25;
-	ycor = coslu(phs, 15) + 30;
+	int idx;
+	xcor = sinelu(phs, xradius) + ((int)(xsize/2));
+	ycor = coslu(phs, yradius) + ((int)ysize/2);
+	idx = (xcor + ycor * xsize) * csize;
+
+        idx = (idx >= pix_size ? pix_size -1 : idx);
+        idx = (idx < 0 ? 0 : idx);
 
 	x = (((float) 
-	      (data[ (xcor + ycor * xsize) * csize + 0] + 
-	       data[ (xcor + ycor * xsize) * csize + 1] + 
-	       data[ (xcor + ycor * xsize) * csize + 2])) / (255.0 * 3));
+	      (data[  idx ] + 
+	       data[ idx + 1] + 
+	       data[ idx + 2])) / (255.0 * 3));
 
 
 	y1 = x - x1 + 0.994 * y1;
@@ -122,8 +138,8 @@ t_int* pix_scanned :: perform(t_int* w)
 
 	*(out_red++) = y1;
 
-	//	phs += scanspeed;
-	phs += 0.027;
+	phs += scanspeed;
+	//phs += 0.027;
 
 	
 #if 0

@@ -73,10 +73,13 @@ class GEM_EXTERN pix_scanned : public GemPixObj
   long int       m_size;
   int            m_csize;
   int            m_xsize;
+  int            m_ysize;
   int            m_format;
   t_float m_phs;
   t_float m_x1;
   t_float m_y1;
+  t_float m_yradius;
+  t_float m_xradius;
   t_float m_scanspeed;
   //////////
   // the outlets~
