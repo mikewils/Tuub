@@ -61,7 +61,7 @@ void pix_scanned :: processImage(imageStruct &image)
 }
 
 /////////////////////////////////////////////////////////
-// signal Performance
+// Signal Performance
 t_int* pix_scanned :: perform(t_int* w)
 {
   pix_scanned *x = GetMyClass((void*)w[1]);
