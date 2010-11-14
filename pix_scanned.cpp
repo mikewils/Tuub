@@ -132,7 +132,7 @@ t_int* pix_scanned :: perform(t_int* w)
 	       data[ idx + 1] + 
 	       data[ idx + 2])) / (255.0 * 3));
 	
-	// a comment
+	// a longer comment 
 	y1 = x - x1 + 0.994 * y1;
 	x1 = x;
 
