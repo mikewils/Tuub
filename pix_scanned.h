@@ -45,7 +45,8 @@ class GEM_EXTERN pix_scanned : public GemPixObj
   pix_scanned();
     	
  protected:
-    	
+
+
   //////////
   // Destructor
   virtual      ~pix_scanned();
@@ -81,9 +82,14 @@ class GEM_EXTERN pix_scanned : public GemPixObj
   t_float m_yradius;
   t_float m_xradius;
   t_float m_scanspeed;
+  int m_counter;
   //////////
   // the outlets~
   t_outlet *o_col[4];
+
+  float sigbuf[4096*4];
+  float last_scanline[4096*4];
+  //  float last_scanline2[4096*4];
 
  private:
     	

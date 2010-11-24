@@ -1,0 +1,33 @@
+
+#include <stdio.h>
+#include <math.h>
+#include "sinetable.h"
+
+
+int main (int argc, char *argv[]}
+{
+  int xcor;
+  int ycor;
+  int idx;
+  int xsize = 160;
+  int ysize = 120;
+  float xradius = 20.5;
+  float yradius = 30.2;
+  int csize = 4;
+  float scanspeed = 20.0;
+  float phs = 0.f;
+  int n = 64;
+  int k;
+
+  for (k=0; k<n; k++) {
+    xcor = sinelu(phs, xradius) + ((int)(xsize/2));
+    ycor = coslu(phs, yradius) + ((int)ysize/2);
+    idx = (xcor + ycor * xsize) * csize;
+    fprintf(stdout, "%d %d\n", xcor, ycor);
+    phs += scanspeed;
+  }
+
+
+
+  return 0;
+}

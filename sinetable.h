@@ -516,12 +516,12 @@ static float sinetab[] = {
 
 static inline int sinelu(float phase, float radius) 
 {
-  return (int) (sinetab[((int)(phase * 512)) & 511] * radius);
+  return (int) (sinetab[((int)(phase * 512)) % 512] * radius);
 }
 
 
 static inline int coslu(float phase, float radius) 
 {
-  return (int) (sinetab[((int)((phase + M_PI/2.0) * 512)) & 511] * radius);
+  return (int) (sinetab[((int)((phase + 0.25f) * 512)) % 512] * radius);
 }
 
